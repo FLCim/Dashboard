@@ -52,6 +52,21 @@ function pickBestAd(ads) {
   })[0];
 }
 
+// Objetivos de campanha que correspondem a "impulsionar posts" (curtir, comentar, seguir etc.).
+const BOOST_OBJECTIVES = new Set([
+  'OUTCOME_ENGAGEMENT',
+  'POST_ENGAGEMENT',
+  'PAGE_LIKES',
+  'ENGAGEMENT',
+]);
+
+function sumActionValues(actions, types) {
+  if (!Array.isArray(actions)) return 0;
+  return actions
+    .filter((a) => types.includes(a.action_type))
+    .reduce((total, a) => total + Number(a.value || 0), 0);
+}
+
 module.exports = async (req, res) => {
   if (!isAuthorized(req)) {
     res.status(401).json({ error: 'Não autorizado.' });
@@ -104,7 +119,7 @@ module.exports = async (req, res) => {
   ].join(',');
 
   try {
-    const [accountInfo, accountInsights, campaignInsights, adInsights] = await Promise.all([
+    const [accountInfo, accountInsights, campaignInsights, adInsights, campaignsMeta] = await Promise.all([
       fetchGraph(adAccountId, {
         access_token: token,
         fields: 'name,currency,account_status',
@@ -129,6 +144,11 @@ module.exports = async (req, res) => {
         level: 'ad',
         limit: 500,
       }).catch(() => ({ data: [] })), // se falhar, seguimos sem criativos
+      fetchGraph(`${adAccountId}/campaigns`, {
+        access_token: token,
+        fields: 'id,objective,effective_status,status',
+        limit: 500,
+      }).catch(() => ({ data: [] })), // se falhar, seguimos sem status/objetivo
     ]);
 
     const summaryRow = (accountInsights.data && accountInsights.data[0]) || {};
@@ -146,20 +166,49 @@ module.exports = async (req, res) => {
       messagingConversations: extractActionValue(summaryRow.actions, 'onsite_conversion.messaging_conversation_started_7d'),
     };
 
-    const campaigns = (campaignInsights.data || []).map((row) => ({
-      campaignId: row.campaign_id,
-      name: row.campaign_name,
-      spend: Number(row.spend || 0),
-      impressions: Number(row.impressions || 0),
-      reach: Number(row.reach || 0),
-      clicks: Number(row.clicks || 0),
-      ctr: Number(row.ctr || 0),
-      cpc: Number(row.cpc || 0),
-      cpm: Number(row.cpm || 0),
-      leads: extractActionValue(row.actions, 'lead'),
-      purchases: extractActionValue(row.actions, 'purchase') ||
-        extractActionValue(row.actions, 'offsite_conversion.fb_pixel_purchase'),
-    })).sort((a, b) => b.spend - a.spend);
+    // Mapa id -> { objective, effectiveStatus, status } de cada campanha.
+    const metaByCampaign = {};
+    (campaignsMeta.data || []).forEach((row) => {
+      metaByCampaign[row.id] = {
+        objective: row.objective || null,
+        effectiveStatus: row.effective_status || row.status || null,
+      };
+    });
+
+    const campaigns = (campaignInsights.data || []).map((row) => {
+      const meta = metaByCampaign[row.campaign_id] || {};
+      const isBoost = Boolean(meta.objective && BOOST_OBJECTIVES.has(meta.objective));
+
+      const boostMetrics = isBoost
+        ? {
+            follows: sumActionValues(row.actions, ['follow', 'onsite_conversion.follow']),
+            likes: sumActionValues(row.actions, ['like', 'post_reaction']),
+            comments: sumActionValues(row.actions, ['comment']),
+            shares: sumActionValues(row.actions, ['post']),
+            linkClicks: sumActionValues(row.actions, ['link_click']),
+            videoViews: sumActionValues(row.actions, ['video_view']),
+          }
+        : null;
+
+      return {
+        campaignId: row.campaign_id,
+        name: row.campaign_name,
+        spend: Number(row.spend || 0),
+        impressions: Number(row.impressions || 0),
+        reach: Number(row.reach || 0),
+        clicks: Number(row.clicks || 0),
+        ctr: Number(row.ctr || 0),
+        cpc: Number(row.cpc || 0),
+        cpm: Number(row.cpm || 0),
+        leads: extractActionValue(row.actions, 'lead'),
+        purchases: extractActionValue(row.actions, 'purchase') ||
+          extractActionValue(row.actions, 'offsite_conversion.fb_pixel_purchase'),
+        effectiveStatus: meta.effectiveStatus || null,
+        objective: meta.objective || null,
+        isBoost,
+        boostMetrics,
+      };
+    }).sort((a, b) => b.spend - a.spend);
 
     // Agrupa os anúncios por campanha e escolhe o de melhor alcance/cliques em cada uma.
     const adsByCampaign = {};
