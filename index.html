@@ -110,6 +110,14 @@
   .refresh-note { color: var(--muted); font-size: 12px; text-align: right; margin-top: -12px; margin-bottom: 20px; }
   .creative-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; display: block; background: #0d0f13; }
   .creative-thumb-empty { width: 48px; height: 48px; border-radius: 8px; background: #0d0f13; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; }
+  .campaign-name-row { display: flex; align-items: center; gap: 6px; }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .status-active { background: var(--good); }
+  .status-paused { background: #f5a623; }
+  .status-off { background: #6b7280; }
+  .status-issue { background: #ff6b6b; }
+  .campaign-status-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .boost-metrics { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -250,6 +258,37 @@
     `).join('');
   }
 
+  function statusInfo(status) {
+    switch (status) {
+      case 'ACTIVE': return { label: 'Ativa', cls: 'status-active' };
+      case 'PAUSED':
+      case 'CAMPAIGN_PAUSED':
+      case 'ADSET_PAUSED': return { label: 'Pausada', cls: 'status-paused' };
+      case 'ARCHIVED': return { label: 'Arquivada', cls: 'status-off' };
+      case 'DELETED': return { label: 'Removida', cls: 'status-off' };
+      case 'DISAPPROVED': return { label: 'Reprovada', cls: 'status-issue' };
+      case 'PENDING_REVIEW':
+      case 'PREAPPROVED':
+      case 'PENDING_BILLING_INFO':
+      case 'WITH_ISSUES':
+      case 'IN_PROCESS': return { label: 'Em análise', cls: 'status-issue' };
+      default: return status ? { label: status, cls: 'status-off' } : { label: 'Status indisponível', cls: 'status-off' };
+    }
+  }
+
+  function renderBoostMetrics(bm) {
+    if (!bm) return '';
+    const items = [];
+    if (bm.follows) items.push(`${fmtNumber(bm.follows)} seguidores`);
+    if (bm.likes) items.push(`${fmtNumber(bm.likes)} curtidas`);
+    if (bm.comments) items.push(`${fmtNumber(bm.comments)} comentários`);
+    if (bm.shares) items.push(`${fmtNumber(bm.shares)} compart.`);
+    if (bm.linkClicks) items.push(`${fmtNumber(bm.linkClicks)} cliques no link`);
+    if (bm.videoViews) items.push(`${fmtNumber(bm.videoViews)} views de vídeo`);
+    if (!items.length) return '<div class="boost-metrics">Impulsionamento de post · sem dados de engajamento no período</div>';
+    return `<div class="boost-metrics">Impulsionamento de post: ${items.join(' · ')}</div>`;
+  }
+
   function renderCampaigns(campaigns, currency) {
     const body = document.getElementById('campaigns-body');
     if (!campaigns.length) {
@@ -262,10 +301,18 @@
       const thumb = (tc && tc.thumbnailUrl)
         ? `<img class="creative-thumb" src="${tc.thumbnailUrl}" alt="${title}" title="${title}" onerror="this.outerHTML='<div class=&quot;creative-thumb-empty&quot;>—</div>'" />`
         : `<div class="creative-thumb-empty" title="${title}">—</div>`;
+      const status = statusInfo(c.effectiveStatus);
       return `
       <tr>
         <td>${thumb}</td>
-        <td>${c.name}</td>
+        <td>
+          <div class="campaign-name-row">
+            <span class="status-dot ${status.cls}" title="${status.label}"></span>
+            <span>${c.name}</span>
+          </div>
+          <div class="campaign-status-label">${status.label}</div>
+          ${renderBoostMetrics(c.boostMetrics)}
+        </td>
         <td>${fmtCurrency(c.spend, currency)}</td>
         <td>${fmtNumber(c.impressions)}</td>
         <td>${fmtNumber(c.reach)}</td>
