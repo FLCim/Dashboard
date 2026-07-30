@@ -108,6 +108,8 @@
   #loading, #load-error { text-align: center; padding: 60px 20px; color: var(--muted); }
   #load-error { color: #ff6b6b; }
   .refresh-note { color: var(--muted); font-size: 12px; text-align: right; margin-top: -12px; margin-bottom: 20px; }
+  .creative-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; display: block; background: #0d0f13; }
+  .creative-thumb-empty { width: 48px; height: 48px; border-radius: 8px; background: #0d0f13; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; }
 </style>
 </head>
 <body>
@@ -152,9 +154,11 @@
 
     <div class="panel">
       <h2>Comparativo por campanha</h2>
+      <div style="color:var(--muted); font-size:12px; margin:-8px 0 12px;">Criativo em destaque: anúncio de melhor alcance e cliques da campanha</div>
       <table>
         <thead>
           <tr>
+            <th>Criativo</th>
             <th>Campanha</th>
             <th>Investimento</th>
             <th>Impressões</th>
@@ -249,11 +253,18 @@
   function renderCampaigns(campaigns, currency) {
     const body = document.getElementById('campaigns-body');
     if (!campaigns.length) {
-      body.innerHTML = '<tr><td colspan="8" style="color:var(--muted)">Nenhuma campanha com dados nesse período.</td></tr>';
+      body.innerHTML = '<tr><td colspan="9" style="color:var(--muted)">Nenhuma campanha com dados nesse período.</td></tr>';
       return;
     }
-    body.innerHTML = campaigns.map(c => `
+    body.innerHTML = campaigns.map(c => {
+      const tc = c.topCreative;
+      const title = tc && tc.adName ? tc.adName.replace(/"/g, '&quot;') : '';
+      const thumb = (tc && tc.thumbnailUrl)
+        ? `<img class="creative-thumb" src="${tc.thumbnailUrl}" alt="${title}" title="${title}" onerror="this.outerHTML='<div class=&quot;creative-thumb-empty&quot;>—</div>'" />`
+        : `<div class="creative-thumb-empty" title="${title}">—</div>`;
+      return `
       <tr>
+        <td>${thumb}</td>
         <td>${c.name}</td>
         <td>${fmtCurrency(c.spend, currency)}</td>
         <td>${fmtNumber(c.impressions)}</td>
@@ -263,7 +274,8 @@
         <td>${fmtCurrency(c.cpc, currency)}</td>
         <td>${fmtNumber(c.leads + c.purchases)}</td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
   }
 
   function renderChart(campaigns, currency) {
