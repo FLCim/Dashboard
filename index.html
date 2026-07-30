@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard de Tráfego Pago</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #171a21;
+    --border: #262b36;
+    --text: #eef1f6;
+    --muted: #9aa3b2;
+    --accent: #4f8cff;
+    --good: #35c97a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    width: 320px;
+    text-align: center;
+  }
+  .login-box h1 { font-size: 18px; margin-bottom: 20px; }
+  .login-box input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0d0f13;
+    color: var(--text);
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .login-box button {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .login-box button:hover { opacity: 0.9; }
+  #error-msg { color: #ff6b6b; font-size: 13px; margin-top: 8px; min-height: 16px; }
+
+  #dashboard { display: none; max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  header.top h1 { font-size: 20px; margin: 0; }
+  header.top .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .card .label { color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+  .card .value { font-size: 22px; font-weight: 600; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .panel h2 { font-size: 15px; margin: 0 0 16px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 500; }
+  tr:last-child td { border-bottom: none; }
+  #loading, #load-error { text-align: center; padding: 60px 20px; color: var(--muted); }
+  #load-error { color: #ff6b6b; }
+  .refresh-note { color: var(--muted); font-size: 12px; text-align: right; margin-top: -12px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Dashboard de Tráfego Pago</h1>
+    <input type="password" id="password-input" placeholder="Digite a senha de acesso" />
+    <button id="login-btn">Entrar</button>
+    <div id="error-msg"></div>
+  </div>
+</div>
+
+<div id="dashboard">
+  <header class="top">
+    <div>
+      <h1 id="account-name">Carregando conta...</h1>
+      <div class="sub" id="account-sub"></div>
+    </div>
+    <select id="period-select">
+      <option value="today">Hoje</option>
+      <option value="yesterday">Ontem</option>
+      <option value="last_7d">Últimos 7 dias</option>
+      <option value="last_14d">Últimos 14 dias</option>
+      <option value="last_30d" selected>Últimos 30 dias</option>
+      <option value="last_90d">Últimos 90 dias</option>
+      <option value="this_month">Este mês</option>
+      <option value="last_month">Mês passado</option>
+    </select>
+  </header>
+
+  <div id="loading">Carregando dados da conta de anúncios...</div>
+  <div id="load-error" style="display:none;"></div>
+
+  <div id="content" style="display:none;">
+    <div class="cards" id="summary-cards"></div>
+
+    <div class="panel">
+      <h2>Investimento e cliques por dia (visão geral do período)</h2>
+      <canvas id="overview-chart" height="90"></canvas>
+    </div>
+
+    <div class="panel">
+      <h2>Comparativo por campanha</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Campanha</th>
+            <th>Investimento</th>
+            <th>Impressões</th>
+            <th>Alcance</th>
+            <th>Cliques</th>
+            <th>CTR</th>
+            <th>CPC</th>
+            <th>Resultados*</th>
+          </tr>
+        </thead>
+        <tbody id="campaigns-body"></tbody>
+      </table>
+    </div>
+    <div class="refresh-note">* Leads + compras/conversões registradas no período. Atualizado em <span id="updated-at"></span></div>
+  </div>
+</div>
+
+<script>
+  const loginScreen = document.getElementById('login-screen');
+  const dashboard = document.getElementById('dashboard');
+  const passwordInput = document.getElementById('password-input');
+  const loginBtn = document.getElementById('login-btn');
+  const errorMsg = document.getElementById('error-msg');
+  const periodSelect = document.getElementById('period-select');
+
+  function fmtCurrency(value, currency) {
+    try {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: currency || 'BRL' }).format(value || 0);
+    } catch (e) {
+      return (value || 0).toFixed(2);
+    }
+  }
+  function fmtNumber(value) {
+    return new Intl.NumberFormat('pt-BR').format(Math.round(value || 0));
+  }
+  function fmtPercent(value) {
+    return (value || 0).toFixed(2).replace('.', ',') + '%';
+  }
+
+  let chartInstance = null;
+
+  async function login() {
+    errorMsg.textContent = '';
+    const password = passwordInput.value;
+    if (!password) return;
+    loginBtn.disabled = true;
+    try {
+      const resp = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        errorMsg.textContent = data.error || 'Senha incorreta.';
+        loginBtn.disabled = false;
+        return;
+      }
+      loginScreen.style.display = 'none';
+      dashboard.style.display = 'block';
+      loadData(periodSelect.value);
+    } catch (e) {
+      errorMsg.textContent = 'Erro de conexão. Tente novamente.';
+      loginBtn.disabled = false;
+    }
+  }
+
+  loginBtn.addEventListener('click', login);
+  passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
+
+  function renderSummary(summary, currency) {
+    const cards = [
+      { label: 'Investimento', value: fmtCurrency(summary.spend, currency) },
+      { label: 'Alcance', value: fmtNumber(summary.reach) },
+      { label: 'Impressões', value: fmtNumber(summary.impressions) },
+      { label: 'Cliques', value: fmtNumber(summary.clicks) },
+      { label: 'CTR', value: fmtPercent(summary.ctr) },
+      { label: 'CPC', value: fmtCurrency(summary.cpc, currency) },
+      { label: 'CPM', value: fmtCurrency(summary.cpm, currency) },
+      { label: 'Leads', value: fmtNumber(summary.leads) },
+      { label: 'Compras/Conversões', value: fmtNumber(summary.purchases) },
+    ];
+    const container = document.getElementById('summary-cards');
+    container.innerHTML = cards.map(c => `
+      <div class="card">
+        <div class="label">${c.label}</div>
+        <div class="value">${c.value}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderCampaigns(campaigns, currency) {
+    const body = document.getElementById('campaigns-body');
+    if (!campaigns.length) {
+      body.innerHTML = '<tr><td colspan="8" style="color:var(--muted)">Nenhuma campanha com dados nesse período.</td></tr>';
+      return;
+    }
+    body.innerHTML = campaigns.map(c => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${fmtCurrency(c.spend, currency)}</td>
+        <td>${fmtNumber(c.impressions)}</td>
+        <td>${fmtNumber(c.reach)}</td>
+        <td>${fmtNumber(c.clicks)}</td>
+        <td>${fmtPercent(c.ctr)}</td>
+        <td>${fmtCurrency(c.cpc, currency)}</td>
+        <td>${fmtNumber(c.leads + c.purchases)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderChart(campaigns, currency) {
+    const ctx = document.getElementById('overview-chart').getContext('2d');
+    const top = campaigns.slice(0, 8);
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: top.map(c => c.name),
+        datasets: [
+          {
+            label: 'Investimento',
+            data: top.map(c => c.spend),
+            backgroundColor: '#4f8cff',
+            yAxisID: 'y',
+          },
+          {
+            label: 'Cliques',
+            data: top.map(c => c.clicks),
+            backgroundColor: '#35c97a',
+            yAxisID: 'y1',
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          y: { position: 'left', ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
+          y1: { position: 'right', ticks: { color: '#9aa3b2' }, grid: { display: false } },
+          x: { ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
+        },
+        plugins: {
+          legend: { labels: { color: '#eef1f6' } },
+        },
+      },
+    });
+  }
+
+  async function loadData(period) {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('load-error').style.display = 'none';
+    document.getElementById('content').style.display = 'none';
+    try {
+      const resp = await fetch('/api/insights?period=' + encodeURIComponent(period));
+      if (resp.status === 401) {
+        dashboard.style.display = 'none';
+        loginScreen.style.display = 'flex';
+        loginBtn.disabled = false;
+        return;
+      }
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Erro ao carregar dados.');
+
+      document.getElementById('account-name').textContent = data.account.name || 'Conta de anúncios';
+      document.getElementById('account-sub').textContent = 'Meta Ads · ' + (data.account.currency || '');
+      document.getElementById('updated-at').textContent = new Date(data.updatedAt).toLocaleString('pt-BR');
+
+      renderSummary(data.summary, data.account.currency);
+      renderCampaigns(data.campaigns, data.account.currency);
+      renderChart(data.campaigns, data.account.currency);
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    } catch (e) {
+      document.getElementById('loading').style.display = 'none';
+      const errEl = document.getElementById('load-error');
+      errEl.textContent = e.message;
+      errEl.style.display = 'block';
+    }
+  }
+
+  periodSelect.addEventListener('change', () => loadData(periodSelect.value));
+
+  // Se já houver sessão válida (cookie), tenta carregar direto.
+  (async function checkSession() {
+    try {
+      const resp = await fetch('/api/insights?period=last_30d');
+      if (resp.status !== 401) {
+        loginScreen.style.display = 'none';
+        dashboard.style.display = 'block';
+        loadData('last_30d');
+      }
+    } catch (e) {}
+  })();
+</script>
+</body>
+</html>
