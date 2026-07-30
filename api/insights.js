@@ -44,6 +44,14 @@ function extractActionValue(actions, type) {
   return found ? Number(found.value) : 0;
 }
 
+// Escolhe o melhor anúncio de uma campanha: maior alcance e, em empate, mais cliques.
+function pickBestAd(ads) {
+  return ads.slice().sort((a, b) => {
+    if (b.reach !== a.reach) return b.reach - a.reach;
+    return b.clicks - a.clicks;
+  })[0];
+}
+
 module.exports = async (req, res) => {
   if (!isAuthorized(req)) {
     res.status(401).json({ error: 'Não autorizado.' });
@@ -73,6 +81,7 @@ module.exports = async (req, res) => {
   ].join(',');
 
   const campaignFields = [
+    'campaign_id',
     'campaign_name',
     'spend',
     'impressions',
@@ -84,8 +93,18 @@ module.exports = async (req, res) => {
     'actions',
   ].join(',');
 
+  const adFields = [
+    'ad_id',
+    'ad_name',
+    'campaign_id',
+    'reach',
+    'clicks',
+    'spend',
+    'impressions',
+  ].join(',');
+
   try {
-    const [accountInfo, accountInsights, campaignInsights] = await Promise.all([
+    const [accountInfo, accountInsights, campaignInsights, adInsights] = await Promise.all([
       fetchGraph(adAccountId, {
         access_token: token,
         fields: 'name,currency,account_status',
@@ -103,6 +122,13 @@ module.exports = async (req, res) => {
         level: 'campaign',
         limit: 100,
       }),
+      fetchGraph(`${adAccountId}/insights`, {
+        access_token: token,
+        fields: adFields,
+        date_preset: period,
+        level: 'ad',
+        limit: 500,
+      }).catch(() => ({ data: [] })), // se falhar, seguimos sem criativos
     ]);
 
     const summaryRow = (accountInsights.data && accountInsights.data[0]) || {};
@@ -121,6 +147,7 @@ module.exports = async (req, res) => {
     };
 
     const campaigns = (campaignInsights.data || []).map((row) => ({
+      campaignId: row.campaign_id,
       name: row.campaign_name,
       spend: Number(row.spend || 0),
       impressions: Number(row.impressions || 0),
@@ -133,6 +160,64 @@ module.exports = async (req, res) => {
       purchases: extractActionValue(row.actions, 'purchase') ||
         extractActionValue(row.actions, 'offsite_conversion.fb_pixel_purchase'),
     })).sort((a, b) => b.spend - a.spend);
+
+    // Agrupa os anúncios por campanha e escolhe o de melhor alcance/cliques em cada uma.
+    const adsByCampaign = {};
+    (adInsights.data || []).forEach((row) => {
+      const cId = row.campaign_id;
+      if (!cId) return;
+      if (!adsByCampaign[cId]) adsByCampaign[cId] = [];
+      adsByCampaign[cId].push({
+        adId: row.ad_id,
+        adName: row.ad_name,
+        reach: Number(row.reach || 0),
+        clicks: Number(row.clicks || 0),
+        spend: Number(row.spend || 0),
+        impressions: Number(row.impressions || 0),
+      });
+    });
+
+    const bestAdByCampaign = {};
+    Object.keys(adsByCampaign).forEach((cId) => {
+      const best = pickBestAd(adsByCampaign[cId]);
+      if (best) bestAdByCampaign[cId] = best;
+    });
+
+    // Busca a miniatura do criativo de cada anúncio vencedor (em paralelo, sem derrubar a resposta se uma falhar).
+    const creativeEntries = Object.entries(bestAdByCampaign);
+    const creativeResults = await Promise.allSettled(
+      creativeEntries.map(([, ad]) =>
+        fetchGraph(`${ad.adId}`, {
+          access_token: token,
+          fields: 'creative{thumbnail_url,image_url}',
+        })
+      )
+    );
+
+    const thumbnailByCampaign = {};
+    creativeEntries.forEach(([cId], idx) => {
+      const result = creativeResults[idx];
+      if (result.status === 'fulfilled') {
+        const creative = result.value.creative || {};
+        thumbnailByCampaign[cId] = creative.image_url || creative.thumbnail_url || null;
+      } else {
+        thumbnailByCampaign[cId] = null;
+      }
+    });
+
+    campaigns.forEach((c) => {
+      const best = bestAdByCampaign[c.campaignId];
+      if (best) {
+        c.topCreative = {
+          adName: best.adName,
+          reach: best.reach,
+          clicks: best.clicks,
+          thumbnailUrl: thumbnailByCampaign[c.campaignId] || null,
+        };
+      } else {
+        c.topCreative = null;
+      }
+    });
 
     res.status(200).json({
       account: {
