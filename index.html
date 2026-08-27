@@ -7,11 +7,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0f1115;
-    --card: #171a21;
-    --border: #262b36;
-    --text: #eef1f6;
-    --muted: #9aa3b2;
+    --bg: #ffffff;
+    --card: #ffffff;
+    --border: #e3e6ea;
+    --text: #1c2230;
+    --muted: #6b7280;
     --accent: #4f8cff;
     --good: #35c97a;
   }
@@ -42,7 +42,7 @@
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid var(--border);
-    background: #0d0f13;
+    background: #f3f4f6;
     color: var(--text);
     margin-bottom: 12px;
     font-size: 14px;
@@ -108,8 +108,8 @@
   #loading, #load-error { text-align: center; padding: 60px 20px; color: var(--muted); }
   #load-error { color: #ff6b6b; }
   .refresh-note { color: var(--muted); font-size: 12px; text-align: right; margin-top: -12px; margin-bottom: 20px; }
-  .creative-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; display: block; background: #0d0f13; }
-  .creative-thumb-empty { width: 48px; height: 48px; border-radius: 8px; background: #0d0f13; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; }
+  .creative-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; display: block; background: #f3f4f6; }
+  .creative-thumb-empty { width: 48px; height: 48px; border-radius: 8px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 11px; }
   .campaign-name-row { display: flex; align-items: center; gap: 6px; }
   .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex: none; }
   .status-active { background: var(--good); }
@@ -124,6 +124,10 @@
   .tab-btn { background: var(--card); color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
   .tab-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
   .view { display: none; }
+  .meta-link-row { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+  .meta-link-label { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+  .meta-link-select { width: 100%; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 12.5px; font-family: inherit; }
+  .meta-link-ref { display: block; font-size: 11.5px; color: var(--muted); margin-top: 4px; }
   .view.active { display: block; }
 
   /* Roadmap tab */
@@ -144,7 +148,7 @@
   .month-card .m-name { font-size: 15px; font-weight: 700; }
   .month-card .m-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; background: rgba(53,201,122,0.15); color: var(--good); }
   .m-budget-row { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-  .ref-budget-input, .total-budget-input { width: 92px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; }
+  .ref-budget-input, .total-budget-input { width: 92px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text); background: #f3f4f6; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; }
   .alloc-status { font-size: 11px; color: var(--muted); margin-top: -4px; }
   .alloc-status.warn { color: #f5a623; font-weight: 600; }
   .campaigns-list { display: flex; flex-direction: column; }
@@ -155,22 +159,22 @@
   .rm-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
   .camp-tag { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 700; color: var(--good); background: rgba(53,201,122,0.12); padding: 2px 6px; border-radius: 8px; flex: none; }
   .campaign-name-input { border: none; background: transparent; font-family: inherit; font-size: 13px; color: var(--text); padding: 3px 4px; flex: 1; min-width: 40px; border-radius: 5px; }
-  .campaign-name-input:hover, .campaign-name-input:focus { background: #0d0f13; outline: 1px solid var(--border); }
+  .campaign-name-input:hover, .campaign-name-input:focus { background: #f3f4f6; outline: 1px solid var(--border); }
   .remove-campaign-btn { border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; padding: 2px 5px; border-radius: 5px; flex: none; line-height: 1; }
-  .remove-campaign-btn:hover { color: #ff6b6b; background: #0d0f13; }
+  .remove-campaign-btn:hover { color: #ff6b6b; background: #f3f4f6; }
   .add-campaign-btn { align-self: flex-start; margin-top: 4px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-family: inherit; }
-  .add-campaign-btn:hover { background: #0d0f13; color: var(--text); }
+  .add-campaign-btn:hover { background: #f3f4f6; color: var(--text); }
   .goal-value-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex: 1 1 100%; }
   .goal-input-wrap { display: flex; align-items: center; gap: 4px; }
   .rs-prefix { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .budget-input { width: 84px; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 700; }
+  .budget-input { width: 84px; font-family: inherit; font-size: 12.5px; color: var(--text); background: #f3f4f6; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 700; }
   .goal-sub { font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; min-height: 13px; }
   .leads-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
   .leads-field label { display: block; font-size: 10.5px; color: var(--muted); margin-bottom: 3px; }
-  .leads-input, .channel-value-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 600; }
+  .leads-input, .channel-value-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #f3f4f6; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 600; }
   .channel-value-input { width: 84px; font-weight: 700; }
   .channels-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
-  .chip { font-size: 10.5px; padding: 3px 8px; border-radius: 20px; font-weight: 600; background: #0d0f13; color: var(--muted); border: 1px solid var(--border); }
+  .chip { font-size: 10.5px; padding: 3px 8px; border-radius: 20px; font-weight: 600; background: #f3f4f6; color: var(--muted); border: 1px solid var(--border); }
   .chip.new { background: rgba(245,166,35,0.15); color: #f5a623; border-color: transparent; }
 
   details.notes-details { margin-top: 4px; }
@@ -179,7 +183,7 @@
   details.notes-details summary:before { content: '▸'; font-size: 10px; }
   details.notes-details[open] summary:before { content: '▾'; }
   details.notes-details .notes-body { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
-  .notes-textarea, .notes-link, .plain-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; }
+  .notes-textarea, .notes-link, .plain-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #f3f4f6; border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; }
   .notes-textarea { min-height: 52px; resize: vertical; }
   .notes-textarea::placeholder, .notes-link::placeholder, .plain-input::placeholder { color: var(--muted); }
 
@@ -213,7 +217,7 @@
   .meeting-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
   .meeting-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
   .meeting-field label { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
-  .meeting-textarea { width: 100%; min-height: 90px; font-family: inherit; font-size: 13px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; resize: vertical; }
+  .meeting-textarea { width: 100%; min-height: 90px; font-family: inherit; font-size: 13px; color: var(--text); background: #f3f4f6; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; resize: vertical; }
 
   @media (max-width: 900px) {
     .roadmap { grid-template-columns: repeat(2, 1fr); }
@@ -530,12 +534,12 @@
         responsive: true,
         interaction: { mode: 'index', intersect: false },
         scales: {
-          y: { position: 'left', ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
-          y1: { position: 'right', ticks: { color: '#9aa3b2' }, grid: { display: false } },
-          x: { ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
+          y: { position: 'left', ticks: { color: '#6b7280' }, grid: { color: '#e3e6ea' } },
+          y1: { position: 'right', ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#6b7280' }, grid: { color: '#e3e6ea' } },
         },
         plugins: {
-          legend: { labels: { color: '#eef1f6' } },
+          legend: { labels: { color: '#1c2230' } },
         },
       },
     });
@@ -564,6 +568,10 @@
       renderSummary(data.summary, data.account.currency);
       renderCampaigns(data.campaigns, data.account.currency);
       renderChart(data.campaigns, data.account.currency);
+      window.__metaCampaigns = data.campaigns.map((c) => ({ id: c.campaignId, name: c.name, spend: c.spend, leads: c.leads, purchases: c.purchases }));
+      window.__metaCampaignsById = {};
+      window.__metaCampaigns.forEach((c) => { window.__metaCampaignsById[c.id] = c; });
+      document.dispatchEvent(new CustomEvent('metaads:updated'));
 
       document.getElementById('loading').style.display = 'none';
       document.getElementById('content').style.display = 'block';
@@ -725,8 +733,28 @@ const Roadmap = (function () {
       '<span class="goal-value-wrap">' + budgetInputHTML(monthId, c.key, c.budget) +
       '<span class="goal-sub" id="cpl-' + monthId + '-' + c.key + '">' + escapeHtml(c.budgetNote || '') + '</span></span></div>' +
       leadsGridHTML(monthId, c.key, c.goal, c.actual) +
+      '<div class="meta-link-row">' +
+      '<label class="meta-link-label">Projeto/Meta vinculado (campanha do Meta Ads)</label>' +
+      '<select class="meta-link-select" data-link-month="' + monthId + '" data-link-key="' + c.key + '">' +
+      '<option value="">— Nenhuma —</option>' +
+      metaCampaignOptionsHTML(c.linkedMetaCampaignId || '') +
+      '</select>' +
+      '<span class="meta-link-ref" id="meta-link-ref-' + monthId + '-' + c.key + '">' + metaLinkRefText(c.linkedMetaCampaignId || '') + '</span>' +
+      '</div>' +
       notesHTML(monthId + '-' + c.key, c.note, c.link) +
       '</div>';
+  }
+
+  function metaCampaignOptionsHTML(selectedId) {
+    const list = window.__metaCampaigns || [];
+    return list.map((m) => '<option value="' + escapeHtml(m.id) + '"' + (m.id === selectedId ? ' selected' : '') + '>' + escapeHtml(m.name) + '</option>').join('');
+  }
+  function metaLinkRefText(campaignId) {
+    if (!campaignId) return '';
+    const map = window.__metaCampaignsById || {};
+    const m = map[campaignId];
+    if (!m) return 'Campanha vinculada não encontrada no período atual.';
+    return 'Meta Ads: ' + brl(m.spend) + ' · ' + Math.round((m.leads || 0) + (m.purchases || 0)) + ' leads/compras no período selecionado.';
   }
 
   function refreshMonth(monthId) {
@@ -804,7 +832,7 @@ const Roadmap = (function () {
     svg.setAttribute('viewBox', '0 0 1080 ' + height);
     const trackX = 16, trackW = 1048;
     let html = '';
-    if (!n) html += '<text x="' + trackX + '" y="' + (topPad + 20) + '" fill="#9aa3b2" font-size="13">Nenhuma campanha neste mês ainda — use "+ Adicionar campanha".</text>';
+    if (!n) html += '<text x="' + trackX + '" y="' + (topPad + 20) + '" fill="#6b7280" font-size="13">Nenhuma campanha neste mês ainda — use "+ Adicionar campanha".</text>';
     blocks.forEach((block, i) => {
       const nameInput = block.querySelector('.campaign-name-input');
       const name = nameInput ? nameInput.value : block.getAttribute('data-key');
@@ -816,7 +844,7 @@ const Roadmap = (function () {
       const rowY = topPad + i * rowH, labelY = rowY + 14, trackY = rowY + 24, trackH = 22;
       let statText;
       html += '<circle cx="' + (trackX + 5) + '" cy="' + (labelY - 4) + '" r="4" fill="' + color + '"></circle>';
-      html += '<text x="' + (trackX + 16) + '" y="' + labelY + '" fill="#eef1f6" font-size="13" font-weight="700">' + escapeHtml(name) + '</text>';
+      html += '<text x="' + (trackX + 16) + '" y="' + labelY + '" fill="#1c2230" font-size="13" font-weight="700">' + escapeHtml(name) + '</text>';
       if (goal > 0) {
         const pct = actual / goal * 100;
         const statusColor = pct >= 100 ? '#35c97a' : pct >= 50 ? '#f5a623' : '#ff6b6b';
@@ -825,14 +853,14 @@ const Roadmap = (function () {
         const scaleMax = Math.max(goal, actual, 1) * 1.15;
         const barW = Math.max(0, (actual / scaleMax) * trackW);
         const metaX = trackX + (goal / scaleMax) * trackW;
-        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#262b36"></rect>';
+        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#e3e6ea"></rect>';
         html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + barW.toFixed(1) + '" height="' + trackH + '" rx="6" fill="' + statusColor + '"></rect>';
         html += '<line x1="' + metaX.toFixed(1) + '" y1="' + (trackY - 4) + '" x2="' + metaX.toFixed(1) + '" y2="' + (trackY + trackH + 4) + '" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 3"></line>';
       } else {
         statText = 'Defina uma meta de leads para acompanhar';
-        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#262b36"></rect>';
+        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#e3e6ea"></rect>';
       }
-      html += '<text x="' + (trackX + trackW) + '" y="' + labelY + '" text-anchor="end" fill="#9aa3b2" font-size="12">' + escapeHtml(statText) + '</text>';
+      html += '<text x="' + (trackX + trackW) + '" y="' + labelY + '" text-anchor="end" fill="#6b7280" font-size="12">' + escapeHtml(statText) + '</text>';
     });
     svg.innerHTML = html;
   }
@@ -962,6 +990,7 @@ const Roadmap = (function () {
       refreshMonth(m.id);
       m.campaigns.forEach((c) => refreshCampaign(m.id, c.key));
     });
+    document.dispatchEvent(new CustomEvent('roadmap:updated'));
   }
 
   function collectState() {
@@ -980,6 +1009,7 @@ const Roadmap = (function () {
         const actualInput = block.querySelector('[data-leads-field="actual"]');
         const noteEl = block.querySelector('.notes-textarea');
         const linkEl = block.querySelector('.notes-link');
+        const metaLinkSelect = block.querySelector('.meta-link-select');
         campaigns.push({
           key,
           name: nameInput ? nameInput.value : key,
@@ -991,6 +1021,7 @@ const Roadmap = (function () {
           budgetNote: block.getAttribute('data-note-attr') || '',
           note: noteEl ? noteEl.value : '',
           link: linkEl ? linkEl.value : '',
+          linkedMetaCampaignId: metaLinkSelect ? (metaLinkSelect.value || null) : null,
         });
       });
       const monthNoteEl = document.querySelector('[data-note-id="' + monthId + '-geral"]');
@@ -1104,6 +1135,13 @@ const Roadmap = (function () {
         const sm = splitMonths.find((s) => s.id === t.getAttribute('data-split-month'));
         if (sm) recalcSplit(sm);
       }
+      else if (t.classList.contains('meta-link-select')) {
+        const linkMonthId = t.getAttribute('data-link-month');
+        const linkKey = t.getAttribute('data-link-key');
+        const refEl = document.getElementById('meta-link-ref-' + linkMonthId + '-' + linkKey);
+        if (refEl) refEl.textContent = metaLinkRefText(t.value || '');
+        document.dispatchEvent(new CustomEvent('roadmap:updated'));
+      }
       scheduleSave();
     });
     document.addEventListener('click', (e) => {
@@ -1123,6 +1161,17 @@ const Roadmap = (function () {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    });
+
+    document.addEventListener('metaads:updated', () => {
+      document.querySelectorAll('.meta-link-select').forEach((sel) => {
+        const selectedVal = sel.value;
+        sel.innerHTML = '<option value="">— Nenhuma —</option>' + metaCampaignOptionsHTML(selectedVal);
+        const linkMonthId = sel.getAttribute('data-link-month');
+        const linkKey = sel.getAttribute('data-link-key');
+        const refEl = document.getElementById('meta-link-ref-' + linkMonthId + '-' + linkKey);
+        if (refEl) refEl.textContent = metaLinkRefText(selectedVal || '');
+      });
     });
   }
 
