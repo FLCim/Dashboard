@@ -118,6 +118,111 @@
   .status-issue { background: #ff6b6b; }
   .campaign-status-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .boost-metrics { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  /* Tabs */
+  .tab-nav { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab-btn { background: var(--card); color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Roadmap tab */
+  .rm-save-bar { display: flex; align-items: center; gap: 10px; justify-content: flex-end; margin-bottom: 16px; flex-wrap: wrap; }
+  .rm-save-status { font-size: 12px; color: var(--muted); }
+  .rm-save-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .rm-save-btn:hover { opacity: 0.9; }
+  .rm-save-btn:disabled { opacity: 0.6; cursor: default; }
+  .rm-export-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .rm-export-btn:hover { color: var(--text); }
+  .rm-section { margin-bottom: 28px; }
+  .rm-section h2 { font-size: 15px; margin: 0 0 4px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .rm-section .rm-sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+
+  .roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .month-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .month-card .m-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .month-card .m-name { font-size: 15px; font-weight: 700; }
+  .month-card .m-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; background: rgba(53,201,122,0.15); color: var(--good); }
+  .m-budget-row { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .ref-budget-input, .total-budget-input { width: 92px; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; }
+  .alloc-status { font-size: 11px; color: var(--muted); margin-top: -4px; }
+  .alloc-status.warn { color: #f5a623; font-weight: 600; }
+  .campaigns-list { display: flex; flex-direction: column; }
+  .campaign-block { border-top: 1px solid var(--border); padding-top: 7px; }
+  .campaign-block:first-of-type { border-top: none; padding-top: 0; }
+  .goal-row { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 4px 8px; font-size: 13px; padding: 0 0 3px; }
+  .goal-name { display: flex; align-items: center; gap: 5px; color: var(--text); flex: 1 1 100%; min-width: 0; }
+  .rm-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+  .camp-tag { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 700; color: var(--good); background: rgba(53,201,122,0.12); padding: 2px 6px; border-radius: 8px; flex: none; }
+  .campaign-name-input { border: none; background: transparent; font-family: inherit; font-size: 13px; color: var(--text); padding: 3px 4px; flex: 1; min-width: 40px; border-radius: 5px; }
+  .campaign-name-input:hover, .campaign-name-input:focus { background: #0d0f13; outline: 1px solid var(--border); }
+  .remove-campaign-btn { border: none; background: transparent; color: var(--muted); font-size: 13px; cursor: pointer; padding: 2px 5px; border-radius: 5px; flex: none; line-height: 1; }
+  .remove-campaign-btn:hover { color: #ff6b6b; background: #0d0f13; }
+  .add-campaign-btn { align-self: flex-start; margin-top: 4px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-family: inherit; }
+  .add-campaign-btn:hover { background: #0d0f13; color: var(--text); }
+  .goal-value-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex: 1 1 100%; }
+  .goal-input-wrap { display: flex; align-items: center; gap: 4px; }
+  .rs-prefix { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .budget-input { width: 84px; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 700; }
+  .goal-sub { font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; min-height: 13px; }
+  .leads-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+  .leads-field label { display: block; font-size: 10.5px; color: var(--muted); margin-bottom: 3px; }
+  .leads-input, .channel-value-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 5px 6px; text-align: right; font-weight: 600; }
+  .channel-value-input { width: 84px; font-weight: 700; }
+  .channels-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+  .chip { font-size: 10.5px; padding: 3px 8px; border-radius: 20px; font-weight: 600; background: #0d0f13; color: var(--muted); border: 1px solid var(--border); }
+  .chip.new { background: rgba(245,166,35,0.15); color: #f5a623; border-color: transparent; }
+
+  details.notes-details { margin-top: 4px; }
+  details.notes-details summary { font-size: 11.5px; color: var(--muted); cursor: pointer; list-style: none; display: flex; align-items: center; gap: 4px; user-select: none; }
+  details.notes-details summary::-webkit-details-marker { display: none; }
+  details.notes-details summary:before { content: '▸'; font-size: 10px; }
+  details.notes-details[open] summary:before { content: '▾'; }
+  details.notes-details .notes-body { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .notes-textarea, .notes-link, .plain-input { width: 100%; font-family: inherit; font-size: 12.5px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 7px; padding: 7px 9px; }
+  .notes-textarea { min-height: 52px; resize: vertical; }
+  .notes-textarea::placeholder, .notes-link::placeholder, .plain-input::placeholder { color: var(--muted); }
+
+  .rm-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px 16px; }
+  .status-legend { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .status-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .month-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .month-tabs button { border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-family: inherit; }
+  .month-tabs button.active { background: var(--accent); color: #fff; border-color: transparent; }
+
+  .split-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .split-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .split-card h3 { font-size: 13.5px; margin: 0 0 10px; color: var(--text); }
+  .split-row { display: grid; grid-template-columns: 1fr 100px 56px; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--border); }
+  .split-row:first-of-type { border-top: none; }
+  .split-name { font-size: 12.5px; display: flex; align-items: center; gap: 6px; color: var(--text); }
+  .split-amount { font-size: 12.5px; font-weight: 700; text-align: right; }
+  .split-pct { font-size: 11.5px; color: var(--muted); text-align: right; }
+  .split-total { display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--muted); }
+  .split-total.warn { color: #f5a623; font-weight: 700; }
+
+  .matrix-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; overflow-x: auto; }
+  table.matrix { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px; }
+  table.matrix th, table.matrix td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border); }
+  table.matrix th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  table.matrix td:first-child, table.matrix th:first-child { text-align: left; color: var(--text); font-weight: 600; }
+  .check-on { color: var(--good); font-weight: 700; }
+  .check-off { color: var(--muted); }
+  .new-tag { font-size: 9.5px; background: rgba(245,166,35,0.15); color: #f5a623; padding: 1px 6px; border-radius: 10px; margin-left: 5px; font-weight: 700; vertical-align: middle; }
+
+  .meeting-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .meeting-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+  .meeting-field label { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+  .meeting-textarea { width: 100%; min-height: 90px; font-family: inherit; font-size: 13px; color: var(--text); background: #0d0f13; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; resize: vertical; }
+
+  @media (max-width: 900px) {
+    .roadmap { grid-template-columns: repeat(2, 1fr); }
+    .split-grid { grid-template-columns: 1fr; }
+    .meeting-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .roadmap { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -132,6 +237,12 @@
 </div>
 
 <div id="dashboard">
+  <div class="tab-nav">
+    <button type="button" class="tab-btn active" data-tab="meta">Métricas Meta Ads</button>
+    <button type="button" class="tab-btn" data-tab="roadmap">Leads &amp; Planejamento</button>
+  </div>
+
+  <div id="view-meta" class="view active">
   <header class="top">
     <div>
       <h1 id="account-name">Carregando conta...</h1>
@@ -181,6 +292,73 @@
       </table>
     </div>
     <div class="refresh-note">* Leads + compras/conversões registradas no período. Atualizado em <span id="updated-at"></span></div>
+  </div>
+  </div>
+
+  <div id="view-roadmap" class="view">
+    <div class="rm-save-bar">
+      <span class="rm-save-status" id="rm-save-status">Carregando dados salvos...</span>
+      <button type="button" class="rm-export-btn" id="rm-export-btn">⬇ Exportar backup (JSON)</button>
+      <button type="button" class="rm-save-btn" id="rm-save-btn">Salvar agora</button>
+    </div>
+
+    <div class="rm-section">
+      <h2>Linha do tempo por mês</h2>
+      <p class="rm-sub">Orçamento de referência editável por mês, e cada campanha com orçamento (R$), meta de leads e leads já alcançados. Use "+ Adicionar campanha" para incluir mudanças e o "✕" para remover. "Notas &amp; links" guarda decisões, criativos e materiais. As alterações são salvas automaticamente.</p>
+      <div class="roadmap" id="roadmap"></div>
+    </div>
+
+    <div class="rm-section">
+      <h2>Acompanhamento de metas</h2>
+      <p class="rm-sub">Meta x alcançado por mês — escolha o mês nas abas abaixo.</p>
+      <div class="rm-chart-card">
+        <div class="month-tabs" id="track-month-tabs"></div>
+        <div class="status-legend">
+          <span><span class="rm-dot" style="background:var(--good)"></span>✓ Meta batida (100%+)</span>
+          <span><span class="rm-dot" style="background:#f5a623"></span>⚠ Em andamento (50–99%)</span>
+          <span><span class="rm-dot" style="background:#ff6b6b"></span>! Abaixo do esperado (&lt;50%)</span>
+          <span><span class="rm-dot" style="background:#6b7280"></span>┄ linha = meta</span>
+        </div>
+        <svg id="track-chart" viewBox="0 0 1080 380" style="width:100%; height:auto; display:block;"></svg>
+      </div>
+    </div>
+
+    <div class="rm-section">
+      <h2>Divisão por canal</h2>
+      <p class="rm-sub">Digite o valor em R$ alocado por canal — o percentual do orçamento total do mês é calculado automaticamente, como referência.</p>
+      <div class="split-grid" id="split-grid"></div>
+    </div>
+
+    <div class="rm-section">
+      <h2>Evolução de canais</h2>
+      <p class="rm-sub">Calculado a partir dos canais marcados em cada mês na linha do tempo acima.</p>
+      <div class="matrix-card">
+        <table class="matrix" id="matrix"></table>
+      </div>
+    </div>
+
+    <div class="rm-section">
+      <h2>Anotações da reunião</h2>
+      <p class="rm-sub">Campo livre para decisões gerais e links úteis.</p>
+      <div class="meeting-card">
+        <div class="meeting-grid">
+          <div class="meeting-field">
+            <label>Gerenciador de anúncios</label>
+            <input type="url" class="plain-input" id="rm-link-ads-manager" placeholder="https://...">
+          </div>
+          <div class="meeting-field">
+            <label>Pasta de criativos / briefings</label>
+            <input type="url" class="plain-input" id="rm-link-creatives" placeholder="https://...">
+          </div>
+          <div class="meeting-field">
+            <label>Planilha de acompanhamento</label>
+            <input type="url" class="plain-input" id="rm-link-tracking" placeholder="https://...">
+          </div>
+        </div>
+        <label style="display:block; font-size:11.5px; color:var(--muted); margin-bottom:6px;">Notas gerais da reunião</label>
+        <textarea class="meeting-textarea" id="rm-note-meeting-general" placeholder="Decisões, pendências, responsáveis, próximos passos..."></textarea>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -406,9 +584,557 @@
         loginScreen.style.display = 'none';
         dashboard.style.display = 'block';
         loadData('last_30d');
+        Roadmap.init();
       }
     } catch (e) {}
   })();
+
+  // Dispara o carregamento da aba de roadmap assim que o login for bem-sucedido.
+  loginBtn.addEventListener('click', () => {
+    setTimeout(() => { if (dashboard.style.display !== 'none') Roadmap.init(); }, 300);
+  });
+
+  // ---- Tabs ----
+  document.querySelectorAll('.tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach((v) => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + btn.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+</script>
+
+<script>
+// ==== Aba "Leads & Planejamento" — roadmap manual, salvo no servidor via /api/roadmap ====
+const Roadmap = (function () {
+  let initialized = false;
+  let saveTimer = null;
+  let currentTrackMonth = null;
+  let customCounter = 0;
+  const customColors = ['#2a78d6', '#eb6834', '#1baf7a', '#e87ba4', '#4a3aa7', '#eda100'];
+  const splitChannels = [
+    { key: 'meta', name: 'Meta Ads', color: '#2a78d6' },
+    { key: 'google', name: 'Google Ads (busca)', color: '#eb6834' },
+    { key: 'youtube', name: 'YouTube Ads', color: '#1baf7a' },
+    { key: 'tiktok', name: 'TikTok Ads', color: '#e87ba4' },
+  ];
+  const splitMonths = [
+    { id: 'split-out', monthId: 'out', name: 'Outubro' },
+    { id: 'split-nov', monthId: 'nov', name: 'Novembro' },
+  ];
+
+  // Dados reais discutidos com a Sabrina Bogiani — ponto de partida editável.
+  // Tudo aqui pode ser alterado na tela; nada é recalculado automaticamente a partir do Meta Ads.
+  function defaultMonths() {
+    return [
+      {
+        id: 'ago', name: 'Agosto', badge: '2 semanas restantes', refBudget: 5000, totalBudget: null,
+        campaigns: [
+          { key: 'clube', name: 'Clube do Livro', tag: '', budget: 0, goal: '', actual: 0, color: '#2a78d6', budgetNote: 'registrar o que já foi investido', note: '', link: '' },
+          { key: 'escola', name: 'Escola de Empreendedorismo', tag: '', budget: 2820.51, goal: '', actual: 0, color: '#eb6834', budgetNote: 'valor real informado', note: '', link: '' },
+        ],
+        channels: ['Meta Ads'], newChannels: [], monthNote: '', monthLink: '',
+      },
+      {
+        id: 'set', name: 'Setembro', badge: '', refBudget: 5000, totalBudget: null,
+        campaigns: [
+          { key: 'clube', name: 'Clube do Livro', tag: '', budget: 2000, goal: 2000, actual: 0, color: '#2a78d6', budgetNote: '', note: '', link: '' },
+          { key: 'escola', name: 'Escola de Empreendedorismo', tag: '', budget: 833, goal: 500, actual: 0, color: '#eb6834', budgetNote: '', note: '', link: '' },
+          { key: 'especial', name: 'Dia do Cliente — Sala Secreta (Plano de Liberdade Financeira)', tag: 'Projeto do mês', budget: 2167, goal: 1300, actual: 0, color: '#1baf7a', budgetNote: '', note: '', link: '' },
+        ],
+        channels: ['Meta Ads'], newChannels: [], monthNote: '', monthLink: '',
+      },
+      {
+        id: 'out', name: 'Outubro', badge: '', refBudget: 5000, totalBudget: null,
+        campaigns: [
+          { key: 'clube', name: 'Clube do Livro', tag: '', budget: 2000, goal: 2000, actual: 0, color: '#2a78d6', budgetNote: '', note: '', link: '' },
+          { key: 'escola', name: 'Escola de Empreendedorismo', tag: '', budget: 1500, goal: 500, actual: 0, color: '#eb6834', budgetNote: '', note: '', link: '' },
+          { key: 'especial', name: 'Início da Black Friday (até novembro)', tag: 'Projeto do mês', budget: 1500, goal: 500, actual: 0, color: '#1baf7a', budgetNote: '', note: '', link: '' },
+        ],
+        channels: ['Meta Ads', 'TikTok Ads', 'YouTube Ads', 'Google Ads'], newChannels: ['TikTok Ads', 'YouTube Ads', 'Google Ads'], monthNote: '', monthLink: '',
+      },
+      {
+        id: 'nov', name: 'Novembro', badge: '', refBudget: 5000, totalBudget: null,
+        campaigns: [
+          { key: 'clube', name: 'Clube do Livro', tag: '', budget: 2000, goal: 2000, actual: 0, color: '#2a78d6', budgetNote: '', note: '', link: '' },
+          { key: 'escola', name: 'Escola de Empreendedorismo', tag: '', budget: 3000, goal: 500, actual: 0, color: '#eb6834', budgetNote: '', note: '', link: '' },
+          { key: 'especial', name: 'Aplicação para o Leadership Club', tag: 'Projeto do mês', budget: 0, goal: '', actual: 0, color: '#1baf7a', budgetNote: '', note: '', link: '' },
+        ],
+        channels: ['Meta Ads', 'TikTok Ads', 'YouTube Ads', 'Google Ads'], newChannels: [], monthNote: '', monthLink: '',
+      },
+    ];
+  }
+
+  function defaultSplits() {
+    const base = { meta: 2750, google: 1000, youtube: 750, tiktok: 500 };
+    return { out: Object.assign({}, base), nov: Object.assign({}, base) };
+  }
+
+  function defaultMeeting() {
+    return { linkAdsManager: '', linkCreatives: '', linkTracking: '', noteGeneral: '' };
+  }
+
+  let months = defaultMonths();
+  let splits = defaultSplits();
+  let meeting = defaultMeeting();
+
+  function brl(v) { return 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function brlInt(v) { return 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+  function escapeHtml(str) { return String(str == null ? '' : str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  function notesHTML(id, noteValue, linkValue, placeholderNote, placeholderLink) {
+    return '<details class="notes-details"><summary>Notas &amp; links</summary>' +
+      '<div class="notes-body">' +
+      '<textarea class="notes-textarea" data-note-id="' + id + '" placeholder="' + (placeholderNote || 'Comentários (criativos, aprendizados, decisões...)') + '">' + escapeHtml(noteValue) + '</textarea>' +
+      '<input type="url" class="notes-link" data-link-id="' + id + '" value="' + escapeHtml(linkValue) + '" placeholder="' + (placeholderLink || 'Link (drive, ad account, briefing...)') + '">' +
+      '</div></details>';
+  }
+
+  function budgetInputHTML(monthId, key, defaultValue) {
+    return '<span class="goal-input-wrap"><span class="rs-prefix">R$</span>' +
+      '<input type="number" class="budget-input" min="0" step="50" value="' + defaultValue + '" data-budget-month="' + monthId + '" data-budget-key="' + key + '"></span>';
+  }
+  function refBudgetInputHTML(monthId, defaultValue) {
+    return '<span class="goal-input-wrap"><span class="rs-prefix">R$</span>' +
+      '<input type="number" class="ref-budget-input" min="0" step="50" value="' + defaultValue + '" data-ref-month="' + monthId + '"></span>';
+  }
+  function totalBudgetInputHTML(monthId, defaultValue) {
+    return '<span class="goal-input-wrap"><span class="rs-prefix">R$</span>' +
+      '<input type="number" class="total-budget-input" min="0" step="50" value="' + defaultValue + '" data-total-month="' + monthId + '"></span>';
+  }
+  function leadsInputHTML(monthId, key, field, defaultValue) {
+    return '<input type="number" class="leads-input" min="0" step="' + (field === 'actual' ? 10 : 50) + '" value="' + defaultValue + '" data-leads-month="' + monthId + '" data-leads-key="' + key + '" data-leads-field="' + field + '">';
+  }
+  function leadsGridHTML(monthId, key, defaultGoal, defaultActual) {
+    return '<div class="leads-grid">' +
+      '<div class="leads-field"><label>Meta (leads)</label>' + leadsInputHTML(monthId, key, 'goal', defaultGoal) + '</div>' +
+      '<div class="leads-field"><label>Alcançado</label>' + leadsInputHTML(monthId, key, 'actual', defaultActual) + '</div>' +
+      '</div>';
+  }
+
+  function campaignBlockHTML(monthId, c) {
+    return '<div class="campaign-block" data-month="' + monthId + '" data-key="' + c.key + '" data-color="' + c.color + '" data-tag="' + escapeHtml(c.tag || '') + '" data-note-attr="' + escapeHtml(c.budgetNote || '') + '">' +
+      '<div class="goal-row"><span class="goal-name">' +
+      '<span class="rm-dot" style="background:' + c.color + '"></span>' +
+      (c.tag ? '<span class="camp-tag">' + escapeHtml(c.tag) + '</span>' : '') +
+      '<input type="text" class="campaign-name-input" value="' + escapeHtml(c.name) + '" data-name-month="' + monthId + '" data-name-key="' + c.key + '">' +
+      '<button type="button" class="remove-campaign-btn" data-remove-month="' + monthId + '" data-remove-key="' + c.key + '" title="Remover campanha">✕</button>' +
+      '</span>' +
+      '<span class="goal-value-wrap">' + budgetInputHTML(monthId, c.key, c.budget) +
+      '<span class="goal-sub" id="cpl-' + monthId + '-' + c.key + '">' + escapeHtml(c.budgetNote || '') + '</span></span></div>' +
+      leadsGridHTML(monthId, c.key, c.goal, c.actual) +
+      notesHTML(monthId + '-' + c.key, c.note, c.link) +
+      '</div>';
+  }
+
+  function refreshMonth(monthId) {
+    const m = months.find((x) => x.id === monthId);
+    const totalInput = document.querySelector('[data-total-month="' + monthId + '"]');
+    const sum = totalInput ? (parseFloat(totalInput.value) || 0) : 0;
+    const refInput = document.querySelector('[data-ref-month="' + monthId + '"]');
+    const ref = refInput ? (parseFloat(refInput.value) || 0) : 0;
+    const statusEl = document.getElementById('alloc-status-' + monthId);
+    if (statusEl) {
+      const diff = Math.round(sum - ref);
+      if (diff === 0) {
+        statusEl.textContent = 'Total alocado: ' + brl(sum) + ' — bate com o orçamento de referência';
+        statusEl.className = 'alloc-status';
+      } else {
+        statusEl.textContent = 'Total alocado: ' + brl(sum) + ' (' + (diff > 0 ? '+' : '') + brlInt(diff) + ' vs. referência de ' + brl(ref) + ')';
+        statusEl.className = 'alloc-status warn';
+      }
+    }
+    const split = splitMonths.find((s) => s.monthId === monthId);
+    if (split) updateSplitTotal(split, sum);
+    renderMatrix();
+  }
+
+  function refreshCampaign(monthId, key) {
+    const block = document.querySelector('.campaign-block[data-month="' + monthId + '"][data-key="' + key + '"]');
+    if (!block) return;
+    const budgetInput = block.querySelector('.budget-input');
+    const goalInput = block.querySelector('[data-leads-field="goal"]');
+    const budget = budgetInput ? (parseFloat(budgetInput.value) || 0) : 0;
+    const goal = goalInput ? (parseFloat(goalInput.value) || 0) : 0;
+    const cplEl = document.getElementById('cpl-' + monthId + '-' + key);
+    if (cplEl) {
+      const note = block.getAttribute('data-note-attr') || '';
+      cplEl.textContent = (goal > 0 && budget > 0) ? 'CPL ' + brl(budget / goal) + '/lead' : note;
+    }
+    if (monthId === currentTrackMonth) renderTrackChart(monthId);
+  }
+
+  function addCampaign(monthId) {
+    customCounter++;
+    const key = 'custom' + Date.now() + customCounter;
+    const color = customColors[customCounter % customColors.length];
+    const listEl = document.getElementById('campaigns-' + monthId);
+    if (!listEl) return;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = campaignBlockHTML(monthId, { key, name: 'Nova campanha', budget: 0, goal: '', actual: 0, color, note: '', link: '' });
+    const block = wrap.firstChild;
+    listEl.appendChild(block);
+    refreshMonth(monthId);
+    refreshCampaign(monthId, key);
+    if (monthId === currentTrackMonth) renderTrackChart(monthId);
+    const nameInput = block.querySelector('.campaign-name-input');
+    if (nameInput) { nameInput.focus(); nameInput.select(); }
+    scheduleSave();
+  }
+
+  function removeCampaign(monthId, key) {
+    const block = document.querySelector('.campaign-block[data-month="' + monthId + '"][data-key="' + key + '"]');
+    if (!block) return;
+    if (!window.confirm('Remover esta campanha do mês?')) return;
+    block.remove();
+    refreshMonth(monthId);
+    if (monthId === currentTrackMonth) renderTrackChart(monthId);
+    scheduleSave();
+  }
+
+  function renderTrackChart(monthId) {
+    const svg = document.getElementById('track-chart');
+    if (!svg) return;
+    const blocks = document.querySelectorAll('.campaign-block[data-month="' + monthId + '"]');
+    const rowH = 64, topPad = 16, bottomPad = 14;
+    const n = blocks.length;
+    const height = topPad + Math.max(n, 1) * rowH + bottomPad;
+    svg.setAttribute('viewBox', '0 0 1080 ' + height);
+    const trackX = 16, trackW = 1048;
+    let html = '';
+    if (!n) html += '<text x="' + trackX + '" y="' + (topPad + 20) + '" fill="#9aa3b2" font-size="13">Nenhuma campanha neste mês ainda — use "+ Adicionar campanha".</text>';
+    blocks.forEach((block, i) => {
+      const nameInput = block.querySelector('.campaign-name-input');
+      const name = nameInput ? nameInput.value : block.getAttribute('data-key');
+      const color = block.getAttribute('data-color') || '#2a78d6';
+      const goalInput = block.querySelector('[data-leads-field="goal"]');
+      const actualInput = block.querySelector('[data-leads-field="actual"]');
+      const goal = goalInput ? (parseFloat(goalInput.value) || 0) : 0;
+      const actual = actualInput ? (parseFloat(actualInput.value) || 0) : 0;
+      const rowY = topPad + i * rowH, labelY = rowY + 14, trackY = rowY + 24, trackH = 22;
+      let statText;
+      html += '<circle cx="' + (trackX + 5) + '" cy="' + (labelY - 4) + '" r="4" fill="' + color + '"></circle>';
+      html += '<text x="' + (trackX + 16) + '" y="' + labelY + '" fill="#eef1f6" font-size="13" font-weight="700">' + escapeHtml(name) + '</text>';
+      if (goal > 0) {
+        const pct = actual / goal * 100;
+        const statusColor = pct >= 100 ? '#35c97a' : pct >= 50 ? '#f5a623' : '#ff6b6b';
+        const icon = pct >= 100 ? '✓' : pct >= 50 ? '⚠' : '!';
+        statText = icon + ' ' + Math.round(pct) + '% · ' + actual.toLocaleString('pt-BR') + ' de ' + goal.toLocaleString('pt-BR') + ' leads';
+        const scaleMax = Math.max(goal, actual, 1) * 1.15;
+        const barW = Math.max(0, (actual / scaleMax) * trackW);
+        const metaX = trackX + (goal / scaleMax) * trackW;
+        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#262b36"></rect>';
+        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + barW.toFixed(1) + '" height="' + trackH + '" rx="6" fill="' + statusColor + '"></rect>';
+        html += '<line x1="' + metaX.toFixed(1) + '" y1="' + (trackY - 4) + '" x2="' + metaX.toFixed(1) + '" y2="' + (trackY + trackH + 4) + '" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 3"></line>';
+      } else {
+        statText = 'Defina uma meta de leads para acompanhar';
+        html += '<rect x="' + trackX + '" y="' + trackY + '" width="' + trackW + '" height="' + trackH + '" rx="6" fill="#262b36"></rect>';
+      }
+      html += '<text x="' + (trackX + trackW) + '" y="' + labelY + '" text-anchor="end" fill="#9aa3b2" font-size="12">' + escapeHtml(statText) + '</text>';
+    });
+    svg.innerHTML = html;
+  }
+
+  function updateSplitTotal(split, newTotal) {
+    split.total = newTotal;
+    const titleEl = document.getElementById('split-title-' + split.id);
+    if (titleEl) titleEl.textContent = split.name + ' — referência: orçamento total do mês ' + brl(newTotal);
+    recalcSplit(split);
+  }
+
+  function recalcSplit(split) {
+    const card = document.getElementById('split-card-' + split.id);
+    if (!card) return;
+    let sum = 0;
+    splitChannels.forEach((ch) => {
+      const input = card.querySelector('[data-split-channel="' + ch.key + '"]');
+      const val = parseFloat(input.value) || 0;
+      sum += val;
+      const pct = split.total > 0 ? (val / split.total * 100) : 0;
+      card.querySelector('[data-split-pct="' + split.id + '-' + ch.key + '"]').textContent = Math.round(pct) + '%';
+    });
+    const totalEl = card.querySelector('[data-split-total="' + split.id + '"]');
+    const diff = Math.round(sum - (split.total || 0));
+    totalEl.textContent = brl(sum) + ' (referência: ' + brl(split.total || 0) + ')';
+    totalEl.className = diff === 0 ? 'split-total' : 'split-total warn';
+  }
+
+  function renderMatrix() {
+    const matrixEl = document.getElementById('matrix');
+    if (!matrixEl) return;
+    const channelSet = [];
+    months.forEach((m) => (m.channels || []).forEach((c) => { if (channelSet.indexOf(c) === -1) channelSet.push(c); }));
+    const matThead = '<thead><tr><th>Canal</th>' + months.map((m) => '<th>' + m.name + '</th>').join('') + '</tr></thead>';
+    const matTbody = '<tbody>' + channelSet.map((c) => {
+      const cells = months.map((m) => {
+        const on = (m.channels || []).indexOf(c) > -1;
+        const isNew = (m.newChannels || []).indexOf(c) > -1;
+        return '<td>' + (on ? '<span class="check-on">&#10003;</span>' + (isNew ? '<span class="new-tag">NOVO</span>' : '') : '<span class="check-off">—</span>') + '</td>';
+      }).join('');
+      return '<tr><td>' + escapeHtml(c) + '</td>' + cells + '</tr>';
+    }).join('') + '</tbody>';
+    matrixEl.innerHTML = matThead + matTbody;
+  }
+
+  function renderAll() {
+    const roadmapEl = document.getElementById('roadmap');
+    roadmapEl.innerHTML = '';
+    months.forEach((m) => {
+      const card = document.createElement('div');
+      card.className = 'month-card';
+      card.id = 'month-card-' + m.id;
+      const defaultTotal = m.totalBudget != null ? m.totalBudget : m.campaigns.reduce((s, c) => s + (parseFloat(c.budget) || 0), 0);
+      let html = '<div class="m-head"><span class="m-name">' + escapeHtml(m.name) + '</span>' +
+        (m.badge ? '<span class="m-badge">' + escapeHtml(m.badge) + '</span>' : '') + '</div>' +
+        '<div class="m-budget-row">Total alocado: ' + totalBudgetInputHTML(m.id, Math.round(defaultTotal * 100) / 100) + '</div>' +
+        '<div class="m-budget-row">Orçamento de referência: ' + refBudgetInputHTML(m.id, m.refBudget) + '</div>' +
+        '<div class="alloc-status" id="alloc-status-' + m.id + '"></div>' +
+        '<div class="campaigns-list" id="campaigns-' + m.id + '">';
+      m.campaigns.forEach((c) => { html += campaignBlockHTML(m.id, c); });
+      html += '</div>';
+      html += '<button type="button" class="add-campaign-btn" data-add-month="' + m.id + '">+ Adicionar campanha</button>';
+      html += '<div class="channels-row">';
+      (m.channels || []).forEach((c) => {
+        const isNew = (m.newChannels || []).indexOf(c) > -1;
+        html += '<span class="chip' + (isNew ? ' new' : '') + '">' + escapeHtml(c) + (isNew ? ' · novo' : '') + '</span>';
+      });
+      html += '</div>';
+      html += notesHTML(m.id + '-geral', m.monthNote, m.monthLink, 'Notas gerais do mês (' + m.name + ')', 'Link geral do mês (relatório, pasta...)');
+      card.innerHTML = html;
+      roadmapEl.appendChild(card);
+    });
+
+    currentTrackMonth = currentTrackMonth || months[0].id;
+    const tabsEl = document.getElementById('track-month-tabs');
+    tabsEl.innerHTML = '';
+    months.forEach((m) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = m.name;
+      btn.setAttribute('data-track-tab', m.id);
+      if (m.id === currentTrackMonth) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        currentTrackMonth = m.id;
+        tabsEl.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTrackChart(m.id);
+      });
+      tabsEl.appendChild(btn);
+    });
+    renderTrackChart(currentTrackMonth);
+
+    const splitGridEl = document.getElementById('split-grid');
+    splitGridEl.innerHTML = '';
+    const monthsById = {};
+    months.forEach((m) => { monthsById[m.id] = m; });
+    splitMonths.forEach((sm) => {
+      const monthTotal = monthsById[sm.monthId] ? monthsById[sm.monthId].campaigns.reduce((s, c) => s + (parseFloat(c.budget) || 0), 0) : 0;
+      sm.total = monthTotal || (monthsById[sm.monthId] && monthsById[sm.monthId].refBudget) || 5000;
+      const card = document.createElement('div');
+      card.className = 'split-card';
+      card.id = 'split-card-' + sm.id;
+      const values = splits[sm.monthId] || {};
+      let html = '<h3><span id="split-title-' + sm.id + '">' + sm.name + ' — referência: orçamento total do mês ' + brl(sm.total) + '</span></h3>';
+      splitChannels.forEach((ch) => {
+        const v = values[ch.key] != null ? values[ch.key] : 0;
+        html += '<div class="split-row">' +
+          '<span class="split-name"><span class="rm-dot" style="background:' + ch.color + '"></span>' + ch.name + '</span>' +
+          '<span class="goal-input-wrap"><span class="rs-prefix">R$</span><input type="number" class="channel-value-input" min="0" step="50" value="' + v + '" data-split-month="' + sm.id + '" data-split-channel="' + ch.key + '"></span>' +
+          '<span class="split-pct" data-split-pct="' + sm.id + '-' + ch.key + '"></span>' +
+          '</div>';
+      });
+      html += '<div class="split-total"><span>Total alocado nos canais</span><span data-split-total="' + sm.id + '"></span></div>';
+      card.innerHTML = html;
+      splitGridEl.appendChild(card);
+      recalcSplit(sm);
+    });
+
+    renderMatrix();
+
+    document.getElementById('rm-link-ads-manager').value = meeting.linkAdsManager || '';
+    document.getElementById('rm-link-creatives').value = meeting.linkCreatives || '';
+    document.getElementById('rm-link-tracking').value = meeting.linkTracking || '';
+    document.getElementById('rm-note-meeting-general').value = meeting.noteGeneral || '';
+
+    months.forEach((m) => {
+      refreshMonth(m.id);
+      m.campaigns.forEach((c) => refreshCampaign(m.id, c.key));
+    });
+  }
+
+  function collectState() {
+    const outMonths = [];
+    document.querySelectorAll('.month-card').forEach((card) => {
+      const monthId = card.id.replace('month-card-', '');
+      const seed = months.find((m) => m.id === monthId) || {};
+      const totalInput = card.querySelector('.total-budget-input');
+      const refInput = card.querySelector('.ref-budget-input');
+      const campaigns = [];
+      card.querySelectorAll('.campaign-block').forEach((block) => {
+        const key = block.getAttribute('data-key');
+        const nameInput = block.querySelector('.campaign-name-input');
+        const budgetInput = block.querySelector('.budget-input');
+        const goalInput = block.querySelector('[data-leads-field="goal"]');
+        const actualInput = block.querySelector('[data-leads-field="actual"]');
+        const noteEl = block.querySelector('.notes-textarea');
+        const linkEl = block.querySelector('.notes-link');
+        campaigns.push({
+          key,
+          name: nameInput ? nameInput.value : key,
+          tag: block.getAttribute('data-tag') || '',
+          budget: budgetInput ? (parseFloat(budgetInput.value) || 0) : 0,
+          goal: goalInput ? (goalInput.value === '' ? '' : (parseFloat(goalInput.value) || 0)) : '',
+          actual: actualInput ? (parseFloat(actualInput.value) || 0) : 0,
+          color: block.getAttribute('data-color') || '#2a78d6',
+          budgetNote: block.getAttribute('data-note-attr') || '',
+          note: noteEl ? noteEl.value : '',
+          link: linkEl ? linkEl.value : '',
+        });
+      });
+      const monthNoteEl = document.querySelector('[data-note-id="' + monthId + '-geral"]');
+      const monthLinkEl = document.querySelector('[data-link-id="' + monthId + '-geral"]');
+      outMonths.push({
+        id: monthId,
+        name: seed.name,
+        badge: seed.badge || '',
+        refBudget: refInput ? (parseFloat(refInput.value) || 0) : (seed.refBudget || 0),
+        totalBudget: totalInput ? (parseFloat(totalInput.value) || 0) : null,
+        campaigns,
+        channels: seed.channels || [],
+        newChannels: seed.newChannels || [],
+        monthNote: monthNoteEl ? monthNoteEl.value : '',
+        monthLink: monthLinkEl ? monthLinkEl.value : '',
+      });
+    });
+
+    const outSplits = {};
+    splitMonths.forEach((sm) => {
+      const card = document.getElementById('split-card-' + sm.id);
+      outSplits[sm.monthId] = {};
+      splitChannels.forEach((ch) => {
+        const input = card ? card.querySelector('[data-split-channel="' + ch.key + '"]') : null;
+        outSplits[sm.monthId][ch.key] = input ? (parseFloat(input.value) || 0) : 0;
+      });
+    });
+
+    return {
+      months: outMonths,
+      splits: outSplits,
+      meeting: {
+        linkAdsManager: document.getElementById('rm-link-ads-manager').value,
+        linkCreatives: document.getElementById('rm-link-creatives').value,
+        linkTracking: document.getElementById('rm-link-tracking').value,
+        noteGeneral: document.getElementById('rm-note-meeting-general').value,
+      },
+    };
+  }
+
+  function setStatus(text) {
+    const el = document.getElementById('rm-save-status');
+    if (el) el.textContent = text;
+  }
+
+  async function save() {
+    setStatus('Salvando...');
+    const saveBtn = document.getElementById('rm-save-btn');
+    if (saveBtn) saveBtn.disabled = true;
+    try {
+      const state = collectState();
+      const resp = await fetch('/api/roadmap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state),
+      });
+      if (!resp.ok) throw new Error('Falha ao salvar');
+      months = state.months.map((m) => Object.assign({}, m));
+      splits = state.splits;
+      meeting = state.meeting;
+      setStatus('Salvo às ' + new Date().toLocaleTimeString('pt-BR'));
+    } catch (e) {
+      setStatus('Falha ao salvar — tentando de novo em instantes');
+      saveTimer = setTimeout(save, 4000);
+    } finally {
+      if (saveBtn) saveBtn.disabled = false;
+    }
+  }
+
+  function scheduleSave() {
+    setStatus('Alterações pendentes...');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 1500);
+  }
+
+  async function load() {
+    setStatus('Carregando dados salvos...');
+    try {
+      const resp = await fetch('/api/roadmap');
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json && json.data && Array.isArray(json.data.months) && json.data.months.length) {
+          months = json.data.months;
+          splits = json.data.splits || defaultSplits();
+          meeting = json.data.meeting || defaultMeeting();
+          setStatus('Dados salvos carregados');
+        } else {
+          setStatus('Nenhum dado salvo ainda — exibindo ponto de partida');
+        }
+      } else {
+        setStatus('Não foi possível carregar os dados salvos — exibindo ponto de partida');
+      }
+    } catch (e) {
+      setStatus('Não foi possível carregar os dados salvos — exibindo ponto de partida');
+    }
+    renderAll();
+  }
+
+  function wireEvents() {
+    document.addEventListener('input', (e) => {
+      const t = e.target;
+      if (!t.closest || !t.closest('#view-roadmap')) return;
+      if (t.classList.contains('budget-input')) refreshCampaign(t.getAttribute('data-budget-month'), t.getAttribute('data-budget-key'));
+      else if (t.classList.contains('leads-input')) refreshCampaign(t.getAttribute('data-leads-month'), t.getAttribute('data-leads-key'));
+      else if (t.classList.contains('ref-budget-input')) refreshMonth(t.getAttribute('data-ref-month'));
+      else if (t.classList.contains('total-budget-input')) refreshMonth(t.getAttribute('data-total-month'));
+      else if (t.classList.contains('campaign-name-input')) {
+        const mId = t.getAttribute('data-name-month');
+        if (mId === currentTrackMonth) renderTrackChart(mId);
+      } else if (t.classList.contains('channel-value-input')) {
+        const sm = splitMonths.find((s) => s.id === t.getAttribute('data-split-month'));
+        if (sm) recalcSplit(sm);
+      }
+      scheduleSave();
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest || !e.target.closest('#view-roadmap')) return;
+      const addBtn = e.target.closest('.add-campaign-btn');
+      if (addBtn) { addCampaign(addBtn.getAttribute('data-add-month')); return; }
+      const rmBtn = e.target.closest('.remove-campaign-btn');
+      if (rmBtn) { removeCampaign(rmBtn.getAttribute('data-remove-month'), rmBtn.getAttribute('data-remove-key')); return; }
+    });
+    document.getElementById('rm-save-btn').addEventListener('click', () => { clearTimeout(saveTimer); save(); });
+    document.getElementById('rm-export-btn').addEventListener('click', () => {
+      const state = collectState();
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'roadmap-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  }
+
+  return {
+    init() {
+      if (initialized) return;
+      initialized = true;
+      wireEvents();
+      load();
+    },
+  };
+})();
 </script>
 </body>
 </html>
+
