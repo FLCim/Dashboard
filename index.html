@@ -481,7 +481,7 @@
         : `<div class="creative-thumb-empty" title="${title}">—</div>`;
       const status = statusInfo(c.effectiveStatus);
       return `
-      <tr>
+      <tr data-campaign-id="${c.campaignId}">
         <td>${thumb}</td>
         <td>
           <div class="campaign-name-row">
@@ -558,6 +558,7 @@
 
       document.getElementById('account-name').textContent = data.account.name || 'Conta de anúncios';
       document.getElementById('account-sub').textContent = 'Meta Ads · ' + (data.account.currency || '');
+      window.__dashCurrency = data.account.currency || 'BRL';
       document.getElementById('updated-at').textContent = new Date(data.updatedAt).toLocaleString('pt-BR');
 
       renderSummary(data.summary, data.account.currency);
@@ -1135,6 +1136,7 @@ const Roadmap = (function () {
   };
 })();
 </script>
+<script src="/drilldown.js" defer></script>
 </body>
 </html>
 
