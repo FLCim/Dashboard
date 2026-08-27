@@ -1,6 +1,8 @@
 // drilldown.js
 // Read-only drill-down (campanha -> conjunto de anúncios -> anúncio) para a aba
 // "Métricas Meta Ads". Não altera dados no Meta Ads Manager, apenas exibe.
+// Também injeta a seleção de vínculo Projeto/Meta <-> campanha do Meta Ads,
+// sincronizada com a aba "Leads & Planejamento" (Roadmap).
 (function () {
   'use strict';
 
@@ -48,15 +50,15 @@
 
   function injectStyles() {
     const css = '\n'
-      + '.dd-caret { display:inline-block; width:14px; text-align:center; color:var(--muted,#9aa3b2); cursor:pointer; user-select:none; margin-right:4px; transition: transform .15s ease; }\n'
+      + '.dd-caret { display:inline-block; width:14px; text-align:center; color:var(--muted,#6b7280); cursor:pointer; user-select:none; margin-right:4px; transition: transform .15s ease; }\n'
       + '.dd-caret.dd-open { transform: rotate(90deg); }\n'
       + 'tr[data-campaign-id] { cursor: pointer; }\n'
       + '.dd-trend-btn { border:none; background:transparent; cursor:pointer; font-size:13px; margin-left:6px; opacity:.75; }\n'
       + '.dd-trend-btn:hover { opacity:1; }\n'
-      + '.dd-panel-row > td { background: rgba(255,255,255,0.02); padding: 10px 14px 16px 30px !important; }\n'
+      + '.dd-panel-row > td { background: rgba(0,0,0,0.02); padding: 10px 14px 16px 30px !important; }\n'
       + '.dd-table { width:100%; border-collapse:collapse; font-size:12.5px; }\n'
-      + '.dd-table th { text-align:left; font-weight:600; color:var(--muted,#9aa3b2); padding:6px 8px; border-bottom:1px solid var(--border,#262b36); white-space:nowrap; }\n'
-      + '.dd-table td { padding:6px 8px; border-bottom:1px solid var(--border,#262b36); vertical-align:middle; }\n'
+      + '.dd-table th { text-align:left; font-weight:600; color:var(--muted,#6b7280); padding:6px 8px; border-bottom:1px solid var(--border,#e3e6ea); white-space:nowrap; }\n'
+      + '.dd-table td { padding:6px 8px; border-bottom:1px solid var(--border,#e3e6ea); vertical-align:middle; }\n'
       + '.dd-table tr[data-adset-id], .dd-table tr[data-ad-id] { cursor:pointer; }\n'
       + '.dd-name-cell { display:flex; align-items:center; gap:2px; }\n'
       + '.dd-status-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; flex:none; }\n'
@@ -64,12 +66,14 @@
       + '.dd-status-paused { background:#f5a623; }\n'
       + '.dd-status-off { background:#6b7280; }\n'
       + '.dd-status-issue { background:#ff6b6b; }\n'
-      + '.dd-loading, .dd-error, .dd-empty { padding:10px 4px; color:var(--muted,#9aa3b2); font-size:12.5px; }\n'
+      + '.dd-loading, .dd-error, .dd-empty { padding:10px 4px; color:var(--muted,#6b7280); font-size:12.5px; }\n'
       + '.dd-error { color:#ff6b6b; }\n'
       + '.dd-ad-thumb { width:28px; height:28px; object-fit:cover; border-radius:4px; margin-right:6px; flex:none; }\n'
-      + '.dd-ad-thumb-empty { width:28px; height:28px; border-radius:4px; background:var(--border,#262b36); margin-right:6px; flex:none; }\n'
+      + '.dd-ad-thumb-empty { width:28px; height:28px; border-radius:4px; background:var(--border,#e3e6ea); margin-right:6px; flex:none; }\n'
       + '.dd-trend-wrap { padding: 8px 4px 14px; }\n'
-      + '.dd-trend-wrap canvas { max-height:180px; }\n';
+      + '.dd-trend-wrap canvas { max-height:180px; }\n'
+      + '.dd-link-wrap { margin-top:6px; }\n'
+      + '.dd-link-select { width:100%; max-width:260px; background:var(--card,#fff); color:var(--text,#1c2230); border:1px solid var(--border,#e3e6ea); border-radius:6px; padding:4px 6px; font-size:11.5px; font-family:inherit; }\n';
     const style = document.createElement('style');
     style.setAttribute('data-dd-styles', '1');
     style.textContent = css;
@@ -244,16 +248,75 @@
           responsive: true,
           interaction: { mode: 'index', intersect: false },
           scales: {
-            y: { position: 'left', ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
-            y1: { position: 'right', ticks: { color: '#9aa3b2' }, grid: { display: false } },
-            x: { ticks: { color: '#9aa3b2' }, grid: { color: '#262b36' } },
+            y: { position: 'left', ticks: { color: '#6b7280' }, grid: { color: '#e3e6ea' } },
+            y1: { position: 'right', ticks: { color: '#6b7280' }, grid: { display: false } },
+            x: { ticks: { color: '#6b7280' }, grid: { color: '#e3e6ea' } },
           },
-          plugins: { legend: { labels: { color: '#eef1f6' } } },
+          plugins: { legend: { labels: { color: '#1c2230' } } },
         },
       });
     } catch (err) {
       panel.querySelector('td').innerHTML = '<div class="dd-error">' + escapeHtml(err.message) + '</div>';
     }
+  }
+
+  // ---- Vínculo Projeto/Meta (Roadmap) <-> campanha do Meta Ads ----
+
+  function getLinkOptions() {
+    const blocks = document.querySelectorAll('.campaign-block');
+    const opts = [];
+    blocks.forEach((block) => {
+      const monthId = block.getAttribute('data-month');
+      const key = block.getAttribute('data-key');
+      if (!monthId || !key) return;
+      const nameInput = block.querySelector('.campaign-name-input');
+      const monthCard = block.closest('.month-card');
+      const monthNameEl = monthCard ? monthCard.querySelector('.m-name') : null;
+      const monthLabel = monthNameEl ? monthNameEl.textContent.trim() : monthId;
+      const campLabel = nameInput ? nameInput.value : key;
+      opts.push({ monthId: monthId, key: key, label: monthLabel + ' — ' + campLabel });
+    });
+    return opts;
+  }
+
+  function findRoadmapSelectFor(campaignId) {
+    if (!campaignId) return null;
+    const sels = document.querySelectorAll('.meta-link-select');
+    for (let i = 0; i < sels.length; i++) {
+      if (sels[i].value === campaignId) return sels[i];
+    }
+    return null;
+  }
+
+  function refreshLinkSelectOptions(select, campaignId) {
+    const opts = getLinkOptions();
+    const current = findRoadmapSelectFor(campaignId);
+    const currentVal = current ? (current.getAttribute('data-link-month') + '::' + current.getAttribute('data-link-key')) : '';
+    const prevSelection = select.value;
+    select.innerHTML = '<option value="">Vincular a Projeto/Meta…</option>' +
+      opts.map((o) => {
+        const val = o.monthId + '::' + o.key;
+        return '<option value="' + escapeHtml(val) + '"' + (val === currentVal ? ' selected' : '') + '>' + escapeHtml(o.label) + '</option>';
+      }).join('');
+    if (!currentVal && prevSelection) select.value = prevSelection;
+  }
+
+  function applyLink(campaignId, monthId, key) {
+    // Impede que a mesma campanha do Meta Ads fique vinculada a mais de um slot do Roadmap.
+    document.querySelectorAll('.meta-link-select').forEach((sel) => {
+      if (sel.value === campaignId) {
+        sel.value = '';
+        sel.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+    if (monthId && key) {
+      const target = document.querySelector('.meta-link-select[data-link-month="' + monthId + '"][data-link-key="' + key + '"]');
+      if (target) {
+        target.value = campaignId;
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+    document.dispatchEvent(new CustomEvent('roadmap:updated'));
   }
 
   function decorateCampaignRows() {
@@ -275,6 +338,20 @@
       trendBtn.setAttribute('data-id', row.getAttribute('data-campaign-id'));
       trendBtn.textContent = '📈';
       nameRow.appendChild(trendBtn);
+
+      const nameTd = nameRow.closest('td');
+      if (nameTd && !nameTd.querySelector('.dd-link-select')) {
+        const campaignId = row.getAttribute('data-campaign-id');
+        const linkWrap = document.createElement('div');
+        linkWrap.className = 'dd-link-wrap';
+        const select = document.createElement('select');
+        select.className = 'dd-link-select';
+        select.setAttribute('data-campaign-id', campaignId);
+        select.addEventListener('click', (e) => e.stopPropagation());
+        refreshLinkSelectOptions(select, campaignId);
+        linkWrap.appendChild(select);
+        nameTd.appendChild(linkWrap);
+      }
     });
   }
 
@@ -311,6 +388,20 @@
           return loadAdsetsHtml(campaignRow.getAttribute('data-campaign-id'));
         });
       }
+    });
+
+    body.addEventListener('change', function (e) {
+      const linkSelect = e.target.closest('.dd-link-select');
+      if (!linkSelect) return;
+      const campaignId = linkSelect.getAttribute('data-campaign-id');
+      const parts = linkSelect.value ? linkSelect.value.split('::') : [];
+      applyLink(campaignId, parts[0] || '', parts[1] || '');
+    });
+
+    document.addEventListener('roadmap:updated', function () {
+      document.querySelectorAll('.dd-link-select').forEach((sel) => {
+        refreshLinkSelectOptions(sel, sel.getAttribute('data-campaign-id'));
+      });
     });
   }
 
