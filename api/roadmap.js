@@ -1,5 +1,17 @@
-const { isAuthorized } = require('./_auth');
 const { put, get } = require('@vercel/blob');
+
+function isAuthorized(req) {
+  const cookieHeader = req.headers.cookie || '';
+  const cookies = Object.fromEntries(
+    cookieHeader.split(';').map((c) => {
+      const idx = c.indexOf('=');
+      if (idx === -1) return [c.trim(), ''];
+      return [c.slice(0, idx).trim(), c.slice(idx + 1).trim()];
+    })
+  );
+  const secret = process.env.SESSION_SECRET;
+  return Boolean(secret) && cookies.dashboard_auth === secret;
+}
 
 // Nome fixo do arquivo salvo no Vercel Blob (store privado). Sempre sobrescrito
 // (allowOverwrite), então existe sempre no máximo uma versão "atual" dos dados
